@@ -28,12 +28,16 @@ def home():
             folium.Marker([line[1], line[2]], popup="lamp", icon=folium.Icon(color="beige",icon="fa-solid fa-lightbulb",prefix="fa")).add_to(lamps)
     HeatMap(lamp_coords, name="Lamp Light", min_opacity=3, gradient=gradient, radius=7, show=False).add_to(m)
 
-    # add sos emergency lamps layer
-    sos = folium.FeatureGroup(name="SOS Lamps", show=False).add_to(m)
+    # add sos phones to emergency resource layer
+    sos = folium.FeatureGroup(name="Emergency Resources", show=False).add_to(m)
     with open("sos.csv", mode = "r") as file:
         csvFile = csv.reader(file)
         for line in csvFile:
-            folium.Marker([line[1], line[2]], popup="SOS Lamp", icon=folium.Icon(color="cadetblue",icon="fa-regular fa-bell",prefix="fa")).add_to(sos)
+            folium.Marker([line[1], line[2]], popup="SOS Phone", icon=folium.Icon(color="blue",icon="fa-regular fa-bell",prefix="fa")).add_to(sos)
+    # add police station to emergency resource layer
+    folium.Marker([39.25984373757963, -76.71630620628858], popup="Baltimore County Police Department", icon=folium.Icon(color="darkblue",icon="fa-solid fa-shield-dog",prefix="fa")).add_to(sos)
+    folium.Marker([39.25727885338491, -76.7141845789751], popup="UMBC Campus Police Department", icon=folium.Icon(color="darkblue",icon="fa-solid fa-shield-dog",prefix="fa")).add_to(sos)
+
 
     # add construction closures layer
     construction = folium.FeatureGroup(name="Construction Closures", show=False).add_to(m)
