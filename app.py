@@ -7,26 +7,26 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    # initialize map
+    # initialize map, no tiles
     m = folium.Map(location=[39.255535, -76.711329],
-                    zoom_start=15.5, width=1200, height=630)
-    # m = folium.Map(location=[39.255535, -76.711329],
-    #                 zoom_start=15.5, width=800, height=500, tiles="CartoDB Voyager")
+                    zoom_start=15.5, width=1200, height=630, tiles=None)
+    # add light map tile (default)
+    folium.TileLayer(tiles="OpenStreetMap", name="Day Mode").add_to(m)
+    # add dark map tile
+    folium.TileLayer(tiles="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+           attr="<a href=https://docs.stadiamaps.com/map-styles/alidade-smooth-dark/>Alidade Smooth Dark</a>", name="Night Mode", show=False).add_to(m)
 
-    # m = folium.Map(location=[39.255535, -76.711329],
-    # zoom_start=15.5, width=800, height=500, tiles="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/0/20/{y}{r}.png}",
-    # attr = '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors')
-    
     # adds lamps layer
-    lamps = folium.FeatureGroup(name="Lamps", show=False).add_to(m)
+    # remove markers for now
+    # lamps = folium.FeatureGroup(name="Lamp Locations", show=False).add_to(m)
     lamp_coords = []
     gradient = {.33: 'yellow', .66: 'orange', 1: 'white'}
     with open("lamps.csv", mode = "r") as file:
         csvFile = csv.reader(file)
         for line in csvFile:
             lamp_coords.append([float(line[1]), float(line[2])])
-            folium.Marker([line[1], line[2]], popup="lamp", icon=folium.Icon(color="beige",icon="fa-solid fa-lightbulb",prefix="fa")).add_to(lamps)
-    HeatMap(lamp_coords, name="Lamp Light", min_opacity=3, gradient=gradient, radius=7, show=False).add_to(m)
+            # folium.Marker([line[1], line[2]], popup="lamp", icon=folium.Icon(color="beige",icon="fa-solid fa-lightbulb",prefix="fa")).add_to(lamps)
+    HeatMap(lamp_coords, name="Lamps", min_opacity=3, gradient=gradient, radius=7, show=False).add_to(m)
 
     # add sos phones to emergency resource layer
     sos = folium.FeatureGroup(name="Emergency Resources", show=False).add_to(m)
@@ -53,19 +53,17 @@ def home():
         for line in csvFile:
             folium.Marker([line[1], line[2]], popup=line[0], icon=folium.Icon(color="lightred",icon="fa-solid fa-person-breastfeeding",prefix="fa")).add_to(lactation)
 
-    # add construction closures layer
+    # add family restrooms layer
     family_restrooms = folium.FeatureGroup(name="Family Friendly Restrooms", show=False).add_to(m)
     with open("family_restrooms.csv", mode = "r") as file:
         csvFile = csv.reader(file)
         for line in csvFile:
             folium.Marker([line[1], line[2]], popup=line[0], icon=folium.Icon(color="lightblue",icon="fa-solid fa-baby",prefix="fa")).add_to(family_restrooms)
 
-
-
     # adds layer controls to map
     folium.LayerControl().add_to(m)
 
-
+    m.save("map.html")
     # convert folium map to html
     m.get_root().render()
     header = m.get_root().header.render()
@@ -81,6 +79,18 @@ def home():
         <body>
             <h1>RetrieverSafe</h1>
             {{body_html|safe}}
+            <a href="tel:4108924880" style="background-color:#abdbe3;
+                background-color: #111827;
+                margin:5px;
+                margin-top:100px;
+                color: #FFFFFF;
+                flex: 0 0 auto;
+                font-size: 20px;
+                font-weight: 800;
+                padding: 5px;
+                text-align: center;
+                border-radius: 8px;
+                width: auto;">Call Campus Police</a>
             <script>
                 {{script|safe}}
             </script>
