@@ -26,7 +26,6 @@ def home():
         for line in csvFile:
             lamp_coords.append([float(line[1]), float(line[2])])
             folium.Marker([line[1], line[2]], popup="lamp", icon=folium.Icon(color="beige",icon="fa-solid fa-lightbulb",prefix="fa")).add_to(lamps)
-            # folium.Marker([line[1], line[2]], popup="lamp", icon=lamp_icon).add_to(lamps)
     HeatMap(lamp_coords, name="Lamp Light", min_opacity=3, gradient=gradient, radius=7, show=False).add_to(m)
 
     # add sos emergency lamps layer
@@ -34,7 +33,30 @@ def home():
     with open("sos.csv", mode = "r") as file:
         csvFile = csv.reader(file)
         for line in csvFile:
-            folium.Marker([line[1], line[2]], popup="SOS Lamp", icon=folium.Icon(color="lightblue",icon="fa-regular fa-bell",prefix="fa")).add_to(sos)
+            folium.Marker([line[1], line[2]], popup="SOS Lamp", icon=folium.Icon(color="cadetblue",icon="fa-regular fa-bell",prefix="fa")).add_to(sos)
+
+    # add construction closures layer
+    construction = folium.FeatureGroup(name="Construction Closures", show=False).add_to(m)
+    with open("construction.csv", mode = "r") as file:
+        csvFile = csv.reader(file)
+        for line in csvFile:
+            folium.Marker([line[1], line[2]], popup="Closed for construction", icon=folium.Icon(color="red",icon="fa-solid fa-xmark",prefix="fa")).add_to(construction)
+
+    # add lactation rooms layer
+    lactation = folium.FeatureGroup(name="Lactation Rooms", show=False).add_to(m)
+    with open("lactation_rooms.csv", mode = "r") as file:
+        csvFile = csv.reader(file)
+        for line in csvFile:
+            folium.Marker([line[1], line[2]], popup=line[0], icon=folium.Icon(color="lightred",icon="fa-solid fa-person-breastfeeding",prefix="fa")).add_to(lactation)
+
+    # add construction closures layer
+    family_restrooms = folium.FeatureGroup(name="Family Friendly Restrooms", show=False).add_to(m)
+    with open("family_restrooms.csv", mode = "r") as file:
+        csvFile = csv.reader(file)
+        for line in csvFile:
+            folium.Marker([line[1], line[2]], popup=line[0], icon=folium.Icon(color="lightblue",icon="fa-solid fa-baby",prefix="fa")).add_to(family_restrooms)
+
+
 
     # adds layer controls to map
     folium.LayerControl().add_to(m)
