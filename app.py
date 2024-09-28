@@ -20,12 +20,11 @@ def home():
     
     lamps = folium.FeatureGroup(name="Lamps", show=False).add_to(m)
     lamp_coords = []
-    gradient = {.33: 'purple', .66: 'blue', 1: 'white'}
+    gradient = {.33: 'yellow', .66: 'orange', 1: 'white'}
 
     with open("lamps.csv", mode = "r") as file:
         csvFile = csv.reader(file)
         for line in csvFile:
-            print(line)
             lamp_coords.append([float(line[1]), float(line[2])])
             folium.Marker([line[1], line[2]], popup="<i>Center of UMBC").add_to(lamps)
 
