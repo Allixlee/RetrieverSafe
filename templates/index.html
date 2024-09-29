@@ -20,6 +20,7 @@
                     <button class="layer-button" layer="construction" onclick="toggleConstruction()"><img src="{{ url_for('static', filename='construction-closures-icon.svg') }}" alt="Construction Closures">Construction Closures</button>
                     <button class="layer-button" layer="lactation" onclick="toggleLactation()"><img src="{{ url_for('static', filename='lactation-rooms-icon.svg') }}" alt="Lactation Rooms">Lactation Rooms</button>
                     <button class="layer-button" layer="familyRestrooms" onclick="toggleFamilyRestrooms()"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Family Friendly Restrooms">Family Friendly Restrooms</button>
+                    <button class="layer-button" layer="accessibilityRoutes" onclick="toggleAccessibilityRoutes()"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Handicap Accessible Routes">Handicap Accessible Routes</button>
                     
                     <button class="layer-button day-night" onclick="toggleDayNight()"><img class="day-icon" src="{{ url_for('static', filename='day-mode-icon.svg') }}" alt="Day Mode"><img class="night-icon" src="{{ url_for('static', filename='night-mode-icon.svg') }}" alt="Night Mode"></button>
                     <a href="javascript:void(0);" class="call-button" onclick="showCallOptions()">Call Campus Police</a>
@@ -47,6 +48,7 @@
             construction: window['{{ construction_layer_name }}'],
             lactation: window['{{ lactation_layer_name }}'],
             familyRestrooms: window['{{ family_restrooms_layer_name }}'],
+            accessibilityRoutes: window['{{ accessibility_layer_name }}'],
             day_tile: window['{{ day_tile_name }}'],
             night_tile: window['{{ night_tile_name }}'],
         };
@@ -96,6 +98,14 @@
         function toggleFamilyRestrooms() {
             toggleLayer(layers.familyRestrooms);
             const button = document.querySelector(`button[layer="familyRestrooms"]`);
+            if (button) {
+                button.classList.toggle('active');
+            }
+        }
+
+        function toggleAccessibilityRoutes() {
+            toggleLayer(layers.accessibilityRoutes);
+            const button = document.querySelector(`button[layer="accessibilityRoutes"]`);
             if (button) {
                 button.classList.toggle('active');
             }

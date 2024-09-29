@@ -36,7 +36,7 @@ def home():
         for line in csvFile:
             folium.Marker([line[1], line[2]], popup="SOS Phone",
                           icon=folium.Icon(color="blue",
-                          icon="fa-regular fa-bell", prefix="fa")).add_to(sos_layer)
+                          icon="fa-solid fa-bell", prefix="fa")).add_to(sos_layer)
     folium.Marker([39.25984373757963, -76.71630620628858],
                   popup="Baltimore County Police Department",
                   icon=folium.Icon(color="darkblue",
@@ -52,7 +52,7 @@ def home():
         for line in csvFile:
             folium.Marker([line[1], line[2]], popup="Closed for construction",
                           icon=folium.Icon(color="red",
-                          icon="fa-solid fa-xmark", prefix="fa")).add_to(construction_layer)
+                          icon="fa-solid fa-screwdriver-wrench", prefix="fa")).add_to(construction_layer)
 
     lactation_layer = folium.FeatureGroup(name="Lactation Rooms", show=False).add_to(m)
     with open("lactation_rooms.csv", mode="r") as file:
@@ -73,6 +73,7 @@ def home():
                           icon="fa-solid fa-baby", prefix="fa")).add_to(family_restrooms_layer)
             
     # reshapes csv into array of coordinates
+    accessibility_layer = folium.FeatureGroup(name="Handicap Accessible Routes", show=False).add_to(m)
     locations = []
     location_lines = []
     with open("accessibility_routes.csv", mode = "r") as file:
@@ -90,7 +91,7 @@ def home():
         color="#167CB9",
         opacity=0.8,
         weight=2.5
-    ).add_to(m)
+    ).add_to(accessibility_layer)
 
     # Remove built-in LayerControl
     # folium.LayerControl().add_to(m)
@@ -101,6 +102,7 @@ def home():
     construction_layer_name = construction_layer.get_name()
     lactation_layer_name = lactation_layer.get_name()
     family_restrooms_layer_name = family_restrooms_layer.get_name()
+    accessibility_layer_name = accessibility_layer.get_name()
     map_name = m.get_name()
 
     # Get tile layer names
@@ -124,6 +126,7 @@ def home():
         construction_layer_name=construction_layer_name,
         lactation_layer_name=lactation_layer_name,
         family_restrooms_layer_name=family_restrooms_layer_name,
+        accessibility_layer_name=accessibility_layer_name,
         day_tile_name=day_tile_name,
         night_tile_name=night_tile_name,
         map_name=map_name
