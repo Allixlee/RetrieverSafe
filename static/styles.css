@@ -187,8 +187,8 @@
     color: var(--text-color-night);
   }
 
-  &.night {
-    background-color: transparent;
+  & button.night {
+    background-color: #d3d3d34f;
   }
   @keyframes fadeIn {
     from {
