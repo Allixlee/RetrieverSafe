@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+{{header|safe}}
+<body>
+    <div class="main-container">
+        <div class="main-container-bg">
+
+            <div class="app-container">
+    
+                <div class="nav-container">
+                    <h1 class="title">RetrieverSafe</h1>
+                    <button class="layer-button" data-layer="Lamps"><img src="{{ url_for('static', filename='lamp-icon.svg') }}" alt="Lamps">Lamps</button>
+                    <button class="layer-button" data-layer="Emergency Resources"><img src="{{ url_for('static', filename='emergency-resources-icon.svg') }}" alt="Emergency Resources">Emergency Resources</button>
+                    <button class="layer-button" data-layer="Construction Closures"><img src="{{ url_for('static', filename='construction-closures-icon.svg') }}" alt="Construction Closures">Construction Closures</button>
+                    <button class="layer-button" data-layer="Lactation Rooms"><img src="{{ url_for('static', filename='lactation-rooms-icon.svg') }}" alt="Lactation Rooms">Lactation Rooms</button>
+                    <button class="layer-button" data-layer="Family Friendly Restrooms"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Family Friendly Restrooms">Family Friendly Restrooms</button>
+                    <a href="tel:4108924880" class="call-button">Call Campus Police</a>
+                </div>
+                {{body_html|safe}}
+    
+            </div>
+        </div>
+    </div>
+    <script>
+        {{script|safe}}
+        // Collect the map object
+    var map;
+    for (var key in window) {
+        if (window.hasOwnProperty(key) && key.startsWith('map_')) {
+            map = window[key];
+            break;
+        }
+    }
+
+    // Collect the layers
+    var layers = {};
+    for (var key in window) {
+        if (window.hasOwnProperty(key)) {
+            var obj = window[key];
+            if (obj instanceof L.Layer && obj.options && obj.options.name) {
+                layers[obj.options.name] = obj;
+            }
+        }
+    }
+
+    // Function to toggle layers by name
+    function toggleLayer(layerName) {
+        var layer = layers[layerName];
+        if (layer) {
+            if(map.hasLayer(layer)){
+                map.removeLayer(layer);
+            } else {
+                map.addLayer(layer);
+            }
+        }
+    }
+
+    // Attach click event listeners to all layer buttons
+    document.querySelectorAll('.layer-button').forEach(function(button){
+        button.addEventListener('click', function(){
+            var layerName = this.getAttribute('data-layer');
+            toggleLayer(layerName);
+            });
+        }); 
+    </script>
+<body>
+</html>

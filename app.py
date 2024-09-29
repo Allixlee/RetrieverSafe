@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template
 import folium
 from folium.plugins import HeatMap
 import csv
@@ -9,7 +9,7 @@ app = Flask(__name__)
 def home():
     # initialize map, no tiles
     m = folium.Map(location=[39.255535, -76.711329],
-                    zoom_start=15.5, width=1200, height=630, tiles=None)
+                    zoom_start=15.5, tiles=None)
     # add light map tile (default)
     folium.TileLayer(tiles="OpenStreetMap", name="Day Mode").add_to(m)
     # add dark map tile
@@ -70,33 +70,7 @@ def home():
     body_html = m.get_root().html.render()
     script = m.get_root().script.render()
     
-    return render_template_string("""
-    <!DOCTYPE html>
-    <html>
-        <head>
-        </head>
-        {{header|safe}}
-        <body>
-            <h1>RetrieverSafe</h1>
-            {{body_html|safe}}
-            <a href="tel:4108924880" style="background-color:#abdbe3;
-                background-color: #111827;
-                margin:5px;
-                margin-top:100px;
-                color: #FFFFFF;
-                flex: 0 0 auto;
-                font-size: 20px;
-                font-weight: 800;
-                padding: 5px;
-                text-align: center;
-                border-radius: 8px;
-                width: auto;">Call Campus Police</a>
-            <script>
-                {{script|safe}}
-            </script>
-        <body>
-    </html>
-    """, header=header, body_html=body_html, script=script)
+    return render_template("index.html", header=header, body_html=body_html, script=script)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port = 5000, debug=True)
