@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import folium
 from folium.plugins import HeatMap
 import csv
+import numpy as np
 
 app = Flask(__name__)
 
@@ -9,7 +10,7 @@ app = Flask(__name__)
 def home():
     # Initialize map without tiles
     m = folium.Map(location=[39.255535, -76.711329],
-                   zoom_start=15.5, tiles=None)
+                   zoom_start=16, tiles=None)
     
     # Add map tiles and store them in variables
     day_tile = folium.TileLayer(tiles="OpenStreetMap", name="Day Mode").add_to(m)
@@ -70,6 +71,26 @@ def home():
                           tooltip="Click for locations inside this building",
                           icon=folium.Icon(color="lightblue",
                           icon="fa-solid fa-baby", prefix="fa")).add_to(family_restrooms_layer)
+            
+    # reshapes csv into array of coordinates
+    locations = []
+    location_lines = []
+    with open("accessibility_routes.csv", mode = "r") as file:
+        csvFile = csv.reader(file)
+        for line in csvFile:
+            locations.append(line)
+
+    for i in locations:
+        location_lines.append(np.reshape(i, (-1,2)))
+
+    # adds polylines to map for accessibility routes
+    folium.PolyLine(
+        locations=location_lines,
+        line_cap="square",
+        color="#167CB9",
+        opacity=0.8,
+        weight=2.5
+    ).add_to(m)
 
     # Remove built-in LayerControl
     # folium.LayerControl().add_to(m)
