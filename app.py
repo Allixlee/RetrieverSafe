@@ -93,25 +93,6 @@ def home():
         weight=2.5
     ).add_to(accessibility_layer)
 
-    # locations2 = []
-    # location_lines2 = []
-    # with open("demo.csv", mode = "r") as file:
-    #     csvFile = csv.reader(file)
-    #     for line in csvFile:
-    #         locations2.append(line)
-
-    # for i in locations2:
-    #     location_lines2.append(np.reshape(i, (-1,2)))
-
-    # # adds polylines to map for accessibility routes
-    # folium.PolyLine(
-    #     locations=location_lines2,
-    #     line_cap="square",
-    #     color="#167CB9",
-    #     opacity=0.8,
-    #     weight=2.5
-    # ).add_to(m)
-
     # Remove built-in LayerControl
     # folium.LayerControl().add_to(m)
 
