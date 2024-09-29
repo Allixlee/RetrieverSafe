@@ -13,12 +13,14 @@
     
                 <div class="nav-container">
                     <h1 class="title">RetrieverSafe</h1>
-                    <button class="layer-button" data-layer="Lamps"><img src="{{ url_for('static', filename='lamp-icon.svg') }}" alt="Lamps">Lamps</button>
-                    <button class="layer-button" data-layer="Emergency Resources"><img src="{{ url_for('static', filename='emergency-resources-icon.svg') }}" alt="Emergency Resources">Emergency Resources</button>
-                    <button class="layer-button" data-layer="Construction Closures"><img src="{{ url_for('static', filename='construction-closures-icon.svg') }}" alt="Construction Closures">Construction Closures</button>
-                    <button class="layer-button" data-layer="Lactation Rooms"><img src="{{ url_for('static', filename='lactation-rooms-icon.svg') }}" alt="Lactation Rooms">Lactation Rooms</button>
-                    <button class="layer-button" data-layer="Family Friendly Restrooms"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Family Friendly Restrooms">Family Friendly Restrooms</button>
-                    <a href="tel:4108924880" class="call-button">Call Campus Police</a>
+                    <button class="layer-button" layer="lamp" onclick="toggleLamps()"><img src="{{ url_for('static', filename='lamp-icon.svg') }}" alt="Lamps">Lamps</button>
+                    <button class="layer-button" layer="sos" onclick="toggleSOS()"><img src="{{ url_for('static', filename='emergency-resources-icon.svg') }}" alt="Emergency Resources">Emergency Resources</button>
+                    <button class="layer-button" layer="construction" onclick="toggleConstruction()"><img src="{{ url_for('static', filename='construction-closures-icon.svg') }}" alt="Construction Closures">Construction Closures</button>
+                    <button class="layer-button" layer="lactation" onclick="toggleLactation()"><img src="{{ url_for('static', filename='lactation-rooms-icon.svg') }}" alt="Lactation Rooms">Lactation Rooms</button>
+                    <button class="layer-button" layer="familyRestrooms" onclick="toggleFamilyRestrooms()"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Family Friendly Restrooms">Family Friendly Restrooms</button>
+                    
+                    <button class="layer-button day-night" onclick="toggleDayNight()"><img class="day-icon" src="{{ url_for('static', filename='day-mode-icon.svg') }}" alt="Day Mode"><img class="night-icon" src="{{ url_for('static', filename='night-mode-icon.svg') }}" alt="Night Mode"></button>
+                    <a href="javascript:void(0);" class="call-button" onclick="confirmCall()">Call Campus Police</a>
                 </div>
                 {{body_html|safe}}
     
@@ -27,45 +29,91 @@
     </div>
     <script>
         {{script|safe}}
-        // Collect the map object
-    var map;
-    for (var key in window) {
-        if (window.hasOwnProperty(key) && key.startsWith('map_')) {
-            map = window[key];
-            break;
-        }
-    }
 
-    // Collect the layers
-    var layers = {};
-    for (var key in window) {
-        if (window.hasOwnProperty(key)) {
-            var obj = window[key];
-            if (obj instanceof L.Layer && obj.options && obj.options.name) {
-                layers[obj.options.name] = obj;
-            }
-        }
-    }
+        var map = window['{{ map_name }}'];
+        var layers = {
+            lamp: window['{{ lamp_layer_name }}'],
+            sos: window['{{ sos_layer_name }}'],
+            construction: window['{{ construction_layer_name }}'],
+            lactation: window['{{ lactation_layer_name }}'],
+            familyRestrooms: window['{{ family_restrooms_layer_name }}'],
+            day_tile: window['{{ day_tile_name }}'],
+            night_tile: window['{{ night_tile_name }}'],
+        };
 
-    // Function to toggle layers by name
-    function toggleLayer(layerName) {
-        var layer = layers[layerName];
-        if (layer) {
-            if(map.hasLayer(layer)){
+        // Generic toggle function
+        function toggleLayer(layer) {
+            if (map.hasLayer(layer)) {
                 map.removeLayer(layer);
             } else {
                 map.addLayer(layer);
             }
         }
-    }
 
-    // Attach click event listeners to all layer buttons
-    document.querySelectorAll('.layer-button').forEach(function(button){
-        button.addEventListener('click', function(){
-            var layerName = this.getAttribute('data-layer');
-            toggleLayer(layerName);
-            });
-        }); 
+        // Specific toggle functions
+        function toggleLamps() {
+            toggleLayer(layers.lamp);
+            const button = document.querySelector(`button[layer="lamp"]`);
+            if (button) {
+                button.classList.toggle('active');
+            }
+        }
+
+        function toggleSOS() {
+            toggleLayer(layers.sos);
+            const button = document.querySelector(`button[layer="sos"]`);
+            if (button) {
+                button.classList.toggle('active');
+            }
+        }
+
+        function toggleConstruction() {
+            toggleLayer(layers.construction);
+            const button = document.querySelector(`button[layer="construction"]`);
+            if (button) {
+                button.classList.toggle('active');
+            }
+        }
+
+        function toggleLactation() {
+            toggleLayer(layers.lactation);
+            const button = document.querySelector(`button[layer="lactation"]`);
+            if (button) {
+                button.classList.toggle('active');
+            }
+        }
+
+        function toggleFamilyRestrooms() {
+            toggleLayer(layers.familyRestrooms);
+            const button = document.querySelector(`button[layer="familyRestrooms"]`);
+            if (button) {
+                button.classList.toggle('active');
+            }
+        }
+
+        // Define toggle function for Day/Night Mode
+        function toggleDayNight() {
+            const allElements = document.getElementsByTagName('*');
+            if (map.hasLayer(layers.day_tile)) {
+                map.removeLayer(layers.day_tile);
+                map.addLayer(layers.night_tile);
+                for (let element of allElements) {
+                    element.classList.add('night');
+                }
+            } else {
+                map.removeLayer(layers.night_tile);
+                map.addLayer(layers.day_tile);
+                for (let element of allElements) {
+                    element.classList.remove('night');
+                }
+            }
+        }
+
+        function confirmCall() {
+            if (confirm("Are you sure you want to call Campus Police?")) {
+                window.location.href = "tel:4108924880";
+            }
+        }
     </script>
 <body>
 </html>
