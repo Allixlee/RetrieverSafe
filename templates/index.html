@@ -20,7 +20,15 @@
                     <button class="layer-button" layer="familyRestrooms" onclick="toggleFamilyRestrooms()"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Family Friendly Restrooms">Family Friendly Restrooms</button>
                     
                     <button class="layer-button day-night" onclick="toggleDayNight()"><img class="day-icon" src="{{ url_for('static', filename='day-mode-icon.svg') }}" alt="Day Mode"><img class="night-icon" src="{{ url_for('static', filename='night-mode-icon.svg') }}" alt="Night Mode"></button>
-                    <a href="javascript:void(0);" class="call-button" onclick="confirmCall()">Call Campus Police</a>
+                    <a href="javascript:void(0);" class="call-button" onclick="showCallOptions()">Call Campus Police</a>
+                    <div id="callOptionsModal" class="modal">
+                        <div class="modal-content">
+                            <p>Choose an option: <span class="close" onclick="closeModal()">&times;</span></p>
+                            <button onclick="reportSuspiciousBehavior()">Report Suspicious Behavior</button>
+                            <button onclick="requestEscort()">Request Escort</button>
+                            <button onclick="reportCrime()">Report Crime</button>
+                        </div>
+                    </div>
                 </div>
                 {{body_html|safe}}
     
@@ -112,6 +120,32 @@
         function confirmCall() {
             if (confirm("Are you sure you want to call Campus Police?")) {
                 window.location.href = "tel:4108924880";
+            }
+        }
+
+        function showCallOptions() {
+            document.getElementById('callOptionsModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('callOptionsModal').style.display = 'none';
+        }
+
+        function reportSuspiciousBehavior() {
+            if (confirm("Are you sure you want to report suspicious behavior?")) {
+                window.location.href = "tel:4108924881"; // Replace with actual number
+            }
+        }
+
+        function requestEscort() {
+            if (confirm("Are you sure you want to request an escort?")) {
+                window.location.href = "tel:4108924882"; // Replace with actual number
+            }
+        }
+
+        function reportCrime() {
+            if (confirm("Are you sure you want to report a crime?")) {
+                window.location.href = "tel:4108924883"; // Replace with actual number
             }
         }
     </script>
