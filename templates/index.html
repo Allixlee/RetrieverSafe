@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>RetrieverSafe</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -114,12 +116,6 @@
                 for (let element of allElements) {
                     element.classList.remove('night');
                 }
-            }
-        }
-
-        function confirmCall() {
-            if (confirm("Are you sure you want to call Campus Police?")) {
-                window.location.href = "tel:4108924880";
             }
         }
 
