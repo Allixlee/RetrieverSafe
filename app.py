@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import folium
 from folium.plugins import HeatMap
 import csv
+import numpy as np
 
 app = Flask(__name__)
 
@@ -9,7 +10,7 @@ app = Flask(__name__)
 def home():
     # initialize map, no tiles
     m = folium.Map(location=[39.255535, -76.711329],
-                    zoom_start=15.5, tiles=None)
+                    zoom_start=16, tiles=None)
     # add light map tile (default)
     folium.TileLayer(tiles="OpenStreetMap", name="Day Mode").add_to(m)
     # add dark map tile
@@ -27,7 +28,7 @@ def home():
             lamp_coords.append([float(line[1]), float(line[2])])
             # folium.Marker([line[1], line[2]], popup="lamp", icon=folium.Icon(color="beige",
                         # icon="fa-solid fa-lightbulb",prefix="fa")).add_to(lamps)
-    HeatMap(lamp_coords, name="Lamps", min_opacity=3, gradient=gradient, radius=7, show=False).add_to(m)
+    HeatMap(lamp_coords, name="Lit Areas", min_opacity=3, gradient=gradient, radius=7, show=False).add_to(m)
 
     # add sos phones to emergency resource layer
     sos = folium.FeatureGroup(name="Emergency Resources", show=False).add_to(m)
@@ -41,7 +42,6 @@ def home():
                   icon=folium.Icon(color="darkblue",icon="fa-solid fa-shield-dog",prefix="fa")).add_to(sos)
     folium.Marker([39.25727885338491, -76.7141845789751], popup="UMBC Campus Police Department",
                   icon=folium.Icon(color="darkblue",icon="fa-solid fa-shield-dog",prefix="fa")).add_to(sos)
-
 
     # add construction closures layer
     construction = folium.FeatureGroup(name="Construction Closures", show=False).add_to(m)
@@ -66,6 +66,26 @@ def home():
         for line in csvFile:
             folium.Marker([line[1], line[2]], popup=line[0], tooltip="Click for locations inside this building",
                           icon=folium.Icon(color="lightblue",icon="fa-solid fa-baby",prefix="fa")).add_to(family_restrooms)
+            
+    # reshapes csv into array of coordinates
+    locations = []
+    location_lines = []
+    with open("accessibility_routes.csv", mode = "r") as file:
+        csvFile = csv.reader(file)
+        for line in csvFile:
+            locations.append(line)
+
+    for i in locations:
+        location_lines.append(np.reshape(i, (-1,2)))
+
+    # adds polylines to map for accessibility routes
+    folium.PolyLine(
+        locations=location_lines,
+        line_cap="square",
+        color="#167CB9",
+        opacity=0.8,
+        weight=2.5
+    ).add_to(m)
 
     # adds layer controls to map
     folium.LayerControl().add_to(m)
