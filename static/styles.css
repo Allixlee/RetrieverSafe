@@ -167,10 +167,9 @@
 .modal-content {
   display: flex;
   flex-direction: column;
-  background-color: #fefefe;
+  background-color: transparent !important;
+  border: none !important;
   padding: 2rem;
-  border: 1px solid #888;
-  border-radius: var(--border-radius);
   max-width: 26.75rem;
 
   & button {
@@ -199,6 +198,14 @@
     align-items: center;
     justify-content: space-between;
     margin: 0;
+
+    &.night {
+      color: var(--text-color-night);
+    }
+  }
+
+  &.night {
+    background-color: transparent;
   }
 }
 
