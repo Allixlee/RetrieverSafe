@@ -9,7 +9,7 @@
 :root {
   --border-radius: 4rem;
   --text-color: #333;
-  --text-color-night: #ffffffd5;
+  --text-color-night: #ffffffec;
 }
 
 .main-container {
@@ -45,11 +45,11 @@
   width: 100%;
   height: 100%;
   padding: 1.5rem;
-  background-color: #ffffffb0;
+  background-color: #ffffffeb;
   border-radius: 3rem 0 0 3rem;
 
   &.night {
-    background-color: #0000004f;
+    background-color: #00000069;
   }
 }
 
