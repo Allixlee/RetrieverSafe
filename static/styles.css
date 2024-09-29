@@ -40,6 +40,7 @@
 
 .nav-container {
   grid-area: nav-container;
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -157,11 +158,17 @@
 }
 
 .call-options {
+  position: absolute;
+  bottom: 0;
+  left: 100%;
+  z-index: 1000;
+  background-color: #eff2f1;
+  border-top-right-radius: 2rem;
   display: none;
   flex-direction: column;
   padding: 1rem;
   width: 100%;
-  height: 100%;
+  height: auto;
   & button {
     background-color: #333;
     color: var(--text-color-night);
@@ -181,6 +188,10 @@
     &:active {
       transform: scale(0.95);
     }
+  }
+
+  &.night {
+    background-color: #1a382ce1;
   }
 
   & p.night {
