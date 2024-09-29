@@ -20,17 +20,17 @@
                     <button class="layer-button" layer="construction" onclick="toggleConstruction()"><img src="{{ url_for('static', filename='construction-closures-icon.svg') }}" alt="Construction Closures">Construction Closures</button>
                     <button class="layer-button" layer="lactation" onclick="toggleLactation()"><img src="{{ url_for('static', filename='lactation-rooms-icon.svg') }}" alt="Lactation Rooms">Lactation Rooms</button>
                     <button class="layer-button" layer="familyRestrooms" onclick="toggleFamilyRestrooms()"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Family Friendly Restrooms">Family Friendly Restrooms</button>
-                    <button class="layer-button" layer="accessibilityRoutes" onclick="toggleAccessibilityRoutes()"><img src="{{ url_for('static', filename='family-friendly-restrooms-icon.svg') }}" alt="Handicap Accessible Routes">Handicap Accessible Routes</button>
+                    <button class="layer-button" layer="accessibilityRoutes" onclick="toggleAccessibilityRoutes()"><img src="{{ url_for('static', filename='access-icon.svg') }}" alt="Handicap Accessible Routes">Handicap Accessible Routes</button>
                     
-                    <button class="layer-button day-night" onclick="toggleDayNight()"><img class="day-icon" src="{{ url_for('static', filename='day-mode-icon.svg') }}" alt="Day Mode"><img class="night-icon" src="{{ url_for('static', filename='night-mode-icon.svg') }}" alt="Night Mode"></button>
-                    <a href="javascript:void(0);" class="call-button" onclick="showCallOptions()">Call Campus Police</a>
-                    <div id="callOptionsModal" class="modal">
-                        <div class="modal-content">
-                            <p>Choose an option: <span class="close" onclick="closeModal()">&times;</span></p>
-                            <button onclick="reportSuspiciousBehavior()">Report Suspicious Behavior</button>
-                            <button onclick="requestEscort()">Request Escort</button>
-                            <button onclick="reportCrime()">Report Crime</button>
-                        </div>
+                    <div class="call-options" style="display: none;">
+                        <p>Choose an option: </p>
+                        <button onclick="reportSuspiciousBehavior()">Report Suspicious Behavior</button>
+                        <button onclick="requestEscort()">Request Escort</button>
+                        <button onclick="reportCrime()">Report Crime</button>
+                    </div>
+                    <div class="symbol-container">
+                        <button class="layer-button day-night" onclick="toggleDayNight()"><img class="day-icon" src="{{ url_for('static', filename='day-mode-icon.svg') }}" alt="Day Mode"><img class="night-icon" src="{{ url_for('static', filename='night-mode-icon.svg') }}" alt="Night Mode"></button>
+                        <button class="layer-button call-button" onclick="showCallOptions()"><img src="{{ url_for('static', filename='emergency-icon.svg') }}" alt="Emergency"></button>
                     </div>
                 </div>
                 {{body_html|safe}}
@@ -130,11 +130,17 @@
         }
 
         function showCallOptions() {
-            document.getElementById('callOptionsModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('callOptionsModal').style.display = 'none';
+            const callOptions = document.querySelector('.call-options');
+            const callButton = document.querySelector('.call-button');
+            if (callOptions) {
+                if (callOptions.style.display === 'none') {
+                    callOptions.style.display = 'flex';
+                    callButton.classList.add('active');
+                } else {
+                    callOptions.style.display = 'none';
+                    callButton.classList.remove('active');
+                }
+            }
         }
 
         function reportSuspiciousBehavior() {
